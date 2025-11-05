@@ -1,0 +1,30 @@
+services:
+  # Backend API
+  - type: web
+    name: voting-platform-api
+    runtime: python
+    region: oregon
+    plan: free
+    branch: claude/debug-error-investigation-011CUqCG4ZA1a22ha2ecqTpe
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: voting-platform-db
+          property: connectionString
+      - key: BACKEND_CORS_ORIGINS
+        value: "https://your-frontend.netlify.app,http://localhost:5173"
+    healthCheckPath: /health
+
+databases:
+  # PostgreSQL Database (optional - SQLite works for free tier)
+  - name: voting-platform-db
+    plan: free
+    databaseName: voting_platform
+    user: voting_user
