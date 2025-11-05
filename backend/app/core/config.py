@@ -14,7 +14,12 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./database/election_commission.db"
 
     # CORS
-    BACKEND_CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:5173"]
+    BACKEND_CORS_ORIGINS: list = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "https://*.netlify.app",
+        "https://*.onrender.com"
+    ]
 
     # First superuser
     FIRST_SUPERUSER_EMAIL: str = "admin@election.ru"

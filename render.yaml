@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: election-commission-api
+    env: python
+    region: frankfurt
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && chmod +x start.sh && ./start.sh"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 10080
+      - key: DATABASE_URL
+        value: sqlite:///./database/election_commission.db
+      - key: PYTHON_VERSION
+        value: 3.11.0
