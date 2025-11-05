@@ -14,5 +14,3 @@ services:
         value: 10080
       - key: DATABASE_URL
         value: sqlite:///./database/election_commission.db
-      - key: PYTHON_VERSION
-        value: 3.11.0
