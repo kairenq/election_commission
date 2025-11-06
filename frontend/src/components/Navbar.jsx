@@ -19,32 +19,32 @@ const Navbar = () => {
       <div className="container">
         <div className="navbar-content">
           <Link to="/" className="navbar-brand">
-            📊 Платформа Голосования
+            🗳️ Система Голосования
           </Link>
 
           <div className="navbar-links">
             {isAuthenticated ? (
               <>
                 <Link to="/dashboard" className="nav-link">
-                  Панель
+                  📊 Панель
+                </Link>
+                <Link to="/polls" className="nav-link">
+                  🗳️ Голосования
+                </Link>
+                <Link to="/teams" className="nav-link">
+                  👥 Команды
+                </Link>
+                <Link to="/feedback" className="nav-link">
+                  💬 Обратная связь
                 </Link>
                 {isAdmin && (
                   <Link to="/admin" className="nav-link admin-link">
                     ⚙️ Админ
                   </Link>
                 )}
-                <Link to="/polls" className="nav-link">
-                  Опросы
-                </Link>
-                <Link to="/teams" className="nav-link">
-                  Команды
-                </Link>
-                <Link to="/feedback" className="nav-link">
-                  Отзывы
-                </Link>
                 <div className="navbar-user">
-                  <span className="user-name">👤 {user?.username}</span>
-                  <button onClick={handleLogout} className="btn btn-sm btn-outline">
+                  <span className="user-name">{user?.full_name || user?.username}</span>
+                  <button onClick={handleLogout} className="btn btn-sm btn-danger">
                     Выход
                   </button>
                 </div>

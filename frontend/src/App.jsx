@@ -8,6 +8,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Polls from './pages/Polls';
+import CreatePoll from './pages/CreatePoll';
+import PollDetails from './pages/PollDetails';
+import Feedback from './pages/Feedback';
+import Teams from './pages/Teams';
 import AdminPanel from './pages/AdminPanel';
 
 // Protected route wrapper
@@ -122,13 +126,26 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/polls/new"
+          element={
+            <ProtectedRoute>
+              <CreatePoll />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/polls/:id"
+          element={
+            <ProtectedRoute>
+              <PollDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/teams"
           element={
             <ProtectedRoute>
-              <div className="container" style={{ padding: '2rem 0' }}>
-                <h1>Команды</h1>
-                <p>Управление командами скоро появится...</p>
-              </div>
+              <Teams />
             </ProtectedRoute>
           }
         />
@@ -136,10 +153,7 @@ function AppRoutes() {
           path="/feedback"
           element={
             <ProtectedRoute>
-              <div className="container" style={{ padding: '2rem 0' }}>
-                <h1>Обратная связь</h1>
-                <p>Система обратной связи скоро появится...</p>
-              </div>
+              <Feedback />
             </ProtectedRoute>
           }
         />

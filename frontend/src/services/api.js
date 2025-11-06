@@ -47,6 +47,7 @@ export const authAPI = {
 export const pollsAPI = {
   getAll: (skip = 0, limit = 100) => api.get(`/polls?skip=${skip}&limit=${limit}`),
   getOne: (id) => api.get(`/polls/${id}`),
+  getById: (id) => api.get(`/polls/${id}`),
   create: (data) => api.post('/polls', data),
   update: (id, data) => api.put(`/polls/${id}`, data),
   delete: (id) => api.delete(`/polls/${id}`),
@@ -63,8 +64,13 @@ export const teamsAPI = {
 
 // Votes API
 export const votesAPI = {
-  getAll: (pollId, skip = 0, limit = 100) =>
-    api.get(`/votes?poll_id=${pollId}&skip=${skip}&limit=${limit}`),
+  getAll: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.poll_id) queryParams.append('poll_id', params.poll_id);
+    if (params.skip !== undefined) queryParams.append('skip', params.skip);
+    if (params.limit !== undefined) queryParams.append('limit', params.limit);
+    return api.get(`/votes?${queryParams.toString()}`);
+  },
   getOne: (id) => api.get(`/votes/${id}`),
   create: (data) => api.post('/votes', data),
   getResults: (pollId) => api.get(`/votes/poll/${pollId}/results`),

@@ -51,16 +51,16 @@ const Dashboard = () => {
   return (
     <div className="container dashboard">
       <div className="dashboard-header">
-        <h1>С возвращением, {user?.full_name || user?.username}! 👋</h1>
-        <p>Вот что происходит с вашими опросами сегодня</p>
+        <h1>Добро пожаловать, {user?.full_name || user?.username}!</h1>
+        <p>Управляйте голосованиями, просматривайте результаты и взаимодействуйте с участниками</p>
       </div>
 
       <div className="stats-grid grid grid-3">
         <div className="stat-card card">
-          <div className="stat-icon">📊</div>
+          <div className="stat-icon">🗳️</div>
           <div className="stat-content">
             <h3>{stats.polls}</h3>
-            <p>Активных опросов</p>
+            <p>Всего голосований</p>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ const Dashboard = () => {
           <div className="stat-icon">👥</div>
           <div className="stat-content">
             <h3>{stats.teams}</h3>
-            <p>Команд</p>
+            <p>Зарегистрированных команд</p>
           </div>
         </div>
 
@@ -76,7 +76,7 @@ const Dashboard = () => {
           <div className="stat-icon">💬</div>
           <div className="stat-content">
             <h3>{stats.feedback}</h3>
-            <p>Отзывов</p>
+            <p>Обращений обратной связи</p>
           </div>
         </div>
       </div>
@@ -90,10 +90,14 @@ const Dashboard = () => {
         </div>
 
         {recentPolls.length === 0 ? (
-          <div className="card text-center">
-            <p>Опросов пока нет. Создайте свой первый опрос!</p>
-            <Link to="/polls/new" className="btn btn-primary mt-2">
-              Создать опрос
+          <div className="card text-center" style={{ padding: '3rem 2rem' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🗳️</div>
+            <h3 style={{ marginBottom: '0.5rem' }}>Голосований пока нет</h3>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+              Создайте своё первое голосование, чтобы начать собирать мнения участников
+            </p>
+            <Link to="/polls/new" className="btn btn-primary">
+              + Создать голосование
             </Link>
           </div>
         ) : (
@@ -120,27 +124,27 @@ const Dashboard = () => {
         <h2>Быстрые действия</h2>
         <div className="grid grid-2">
           <Link to="/polls/new" className="action-card card">
-            <span className="action-icon">📝</span>
-            <h3>Создать опрос</h3>
-            <p>Начать новый опрос</p>
-          </Link>
-
-          <Link to="/teams" className="action-card card">
-            <span className="action-icon">👥</span>
-            <h3>Управление командами</h3>
-            <p>Просмотр и организация команд</p>
-          </Link>
-
-          <Link to="/feedback/new" className="action-card card">
-            <span className="action-icon">💬</span>
-            <h3>Оставить отзыв</h3>
-            <p>Поделиться мнением</p>
+            <span className="action-icon">🗳️</span>
+            <h3>Создать голосование</h3>
+            <p>Запустить новое голосование или опрос</p>
           </Link>
 
           <Link to="/polls" className="action-card card">
             <span className="action-icon">📊</span>
-            <h3>Посмотреть результаты</h3>
-            <p>Проверить результаты голосования</p>
+            <h3>Все голосования</h3>
+            <p>Просмотреть все опросы и результаты</p>
+          </Link>
+
+          <Link to="/teams" className="action-card card">
+            <span className="action-icon">👥</span>
+            <h3>Команды</h3>
+            <p>Управление командами участников</p>
+          </Link>
+
+          <Link to="/feedback" className="action-card card">
+            <span className="action-icon">💬</span>
+            <h3>Обратная связь</h3>
+            <p>Отправить обращение или предложение</p>
           </Link>
         </div>
       </div>
