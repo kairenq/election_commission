@@ -15,12 +15,19 @@ async def get_votes(
     skip: int = 0,
     limit: int = 100,
     poll_id: int = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
-    """Get all votes"""
+    """Get all votes - returns votes for the current user's participant"""
+    # Get participant for current user
+    participant = db.query(Participant).filter(Participant.user_id == current_user.id).first()
+
     query = db.query(Vote)
     if poll_id:
         query = query.filter(Vote.poll_id == poll_id)
+    if participant:
+        query = query.filter(Vote.participant_id == participant.id)
+
     return query.offset(skip).limit(limit).all()
 
 @router.get("/{vote_id}", response_model=VoteResponse)
@@ -50,15 +57,24 @@ async def create_vote(
     if not option or option.poll_id != vote_data.poll_id:
         raise HTTPException(status_code=404, detail="Invalid poll option")
 
-    # Check if participant exists
-    participant = db.query(Participant).filter(Participant.id == vote_data.participant_id).first()
+    # Get or create participant for current user
+    participant = db.query(Participant).filter(Participant.user_id == current_user.id).first()
     if not participant:
-        raise HTTPException(status_code=404, detail="Participant not found")
+        # Auto-create participant from user
+        participant = Participant(
+            user_id=current_user.id,
+            full_name=current_user.full_name or current_user.username,
+            email=current_user.email,
+            status="active"
+        )
+        db.add(participant)
+        db.commit()
+        db.refresh(participant)
 
     # Check if already voted
     existing_vote = db.query(Vote).filter(
         Vote.poll_id == vote_data.poll_id,
-        Vote.participant_id == vote_data.participant_id
+        Vote.participant_id == participant.id
     ).first()
     if existing_vote:
         raise HTTPException(status_code=400, detail="Already voted in this poll")
@@ -66,7 +82,10 @@ async def create_vote(
     # Create vote
     vote_time = datetime.utcnow()
     db_vote = Vote(
-        **vote_data.model_dump(),
+        poll_id=vote_data.poll_id,
+        participant_id=participant.id,
+        option_id=vote_data.option_id,
+        location=vote_data.location,
         vote_time=vote_time,
         vote_month=vote_time.strftime("%Y-%m")
     )
