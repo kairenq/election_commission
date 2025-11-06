@@ -12,43 +12,50 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  const isAdmin = user?.is_superuser || user?.role_id === 1;
+
   return (
     <nav className="navbar">
       <div className="container">
         <div className="navbar-content">
           <Link to="/" className="navbar-brand">
-            📊 Voting Platform
+            📊 Платформа Голосования
           </Link>
 
           <div className="navbar-links">
             {isAuthenticated ? (
               <>
                 <Link to="/dashboard" className="nav-link">
-                  Dashboard
+                  Панель
                 </Link>
+                {isAdmin && (
+                  <Link to="/admin" className="nav-link admin-link">
+                    ⚙️ Админ
+                  </Link>
+                )}
                 <Link to="/polls" className="nav-link">
-                  Polls
+                  Опросы
                 </Link>
                 <Link to="/teams" className="nav-link">
-                  Teams
+                  Команды
                 </Link>
                 <Link to="/feedback" className="nav-link">
-                  Feedback
+                  Отзывы
                 </Link>
                 <div className="navbar-user">
                   <span className="user-name">👤 {user?.username}</span>
                   <button onClick={handleLogout} className="btn btn-sm btn-outline">
-                    Logout
+                    Выход
                   </button>
                 </div>
               </>
             ) : (
               <>
                 <Link to="/login" className="nav-link">
-                  Login
+                  Вход
                 </Link>
                 <Link to="/register" className="btn btn-primary btn-sm">
-                  Sign Up
+                  Регистрация
                 </Link>
               </>
             )}

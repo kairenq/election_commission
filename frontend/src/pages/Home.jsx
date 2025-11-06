@@ -10,22 +10,22 @@ const Home = () => {
     <div className="home">
       <section className="hero">
         <div className="container">
-          <h1 className="hero-title">Corporate Voting Platform</h1>
+          <h1 className="hero-title">Платформа Корпоративного Голосования</h1>
           <p className="hero-subtitle">
-            Create polls, gather feedback, and make decisions together
+            Создавайте опросы, собирайте отзывы и принимайте решения вместе
           </p>
           <div className="hero-actions">
             {isAuthenticated ? (
               <Link to="/dashboard" className="btn btn-primary btn-lg">
-                Go to Dashboard
+                Перейти в панель
               </Link>
             ) : (
               <>
                 <Link to="/register" className="btn btn-primary btn-lg">
-                  Get Started
+                  Начать работу
                 </Link>
                 <Link to="/login" className="btn btn-outline btn-lg">
-                  Sign In
+                  Войти
                 </Link>
               </>
             )}
@@ -35,42 +35,42 @@ const Home = () => {
 
       <section className="features">
         <div className="container">
-          <h2 className="section-title">Features</h2>
+          <h2 className="section-title">Возможности платформы</h2>
           <div className="grid grid-3">
             <div className="feature-card card">
               <div className="feature-icon">📊</div>
-              <h3>Easy Polling</h3>
-              <p>Create and manage polls for your team with just a few clicks</p>
+              <h3>Простое голосование</h3>
+              <p>Создавайте и управляйте опросами для вашей команды в пару кликов</p>
             </div>
 
             <div className="feature-card card">
               <div className="feature-icon">👥</div>
-              <h3>Team Management</h3>
-              <p>Organize participants into teams and track voting patterns</p>
+              <h3>Управление командами</h3>
+              <p>Организуйте участников в команды и отслеживайте результаты</p>
             </div>
 
             <div className="feature-card card">
               <div className="feature-icon">📈</div>
-              <h3>Real-time Results</h3>
-              <p>View voting results and analytics in real-time</p>
+              <h3>Результаты в реальном времени</h3>
+              <p>Просматривайте результаты голосования и аналитику онлайн</p>
             </div>
 
             <div className="feature-card card">
               <div className="feature-icon">🔒</div>
-              <h3>Secure & Private</h3>
-              <p>Your votes are secure with authentication and encryption</p>
+              <h3>Безопасность</h3>
+              <p>Ваши голоса защищены аутентификацией и шифрованием</p>
             </div>
 
             <div className="feature-card card">
               <div className="feature-icon">💬</div>
-              <h3>Feedback System</h3>
-              <p>Collect and manage feedback from participants</p>
+              <h3>Система обратной связи</h3>
+              <p>Собирайте и обрабатывайте отзывы от участников</p>
             </div>
 
             <div className="feature-card card">
               <div className="feature-icon">🚀</div>
-              <h3>Fast & Reliable</h3>
-              <p>Built with modern technology for speed and reliability</p>
+              <h3>Быстро и надёжно</h3>
+              <p>Создано на современных технологиях для скорости и надёжности</p>
             </div>
           </div>
         </div>
