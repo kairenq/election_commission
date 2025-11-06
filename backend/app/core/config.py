@@ -20,7 +20,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:8000",
-        "https://*.netlify.app"
+        "https://*.pages.dev"
     ]
 
     class Config:

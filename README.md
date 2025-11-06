@@ -110,6 +110,8 @@ npm run dev
 
 ## 🌐 Деплой
 
+> 📖 Полное руководство по деплою смотрите в [DEPLOY.md](./DEPLOY.md)
+
 ### Backend на Render
 
 1. Создайте новый Web Service на [Render](https://render.com)
@@ -123,16 +125,21 @@ npm run dev
    - `DATABASE_URL` - URL PostgreSQL базы (опционально)
    - `BACKEND_CORS_ORIGINS` - URL вашего frontend
 
-### Frontend на Netlify
+**💡 Uptime мониторинг**: Backend поддерживает HEAD запросы на `/health` для UptimeRobot (предотвращает сон Free tier)
 
-1. Создайте новый сайт на [Netlify](https://netlify.com)
-2. Подключите GitHub репозиторий
-3. Настройки:
-   - **Base directory**: `frontend`
+### Frontend на Cloudflare Pages
+
+1. Войдите в [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. **Pages** → **Create a project** → **Connect to Git**
+3. Выберите репозиторий и настройки:
+   - **Framework preset**: `Vite`
    - **Build command**: `npm run build`
-   - **Publish directory**: `dist`
+   - **Build output directory**: `dist`
+   - **Root directory**: `frontend`
 4. Добавьте переменную окружения:
-   - `VITE_API_URL` - URL вашего backend API
+   - `VITE_API_URL` - URL вашего backend API (например: `https://your-api.onrender.com/api`)
+
+**✨ Преимущества Cloudflare Pages**: Неограниченные запросы, Global CDN, Automatic SSL, бесплатный SSL сертификат
 
 ## 📚 API Документация
 

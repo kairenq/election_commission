@@ -19,7 +19,7 @@ services:
           name: voting-platform-db
           property: connectionString
       - key: BACKEND_CORS_ORIGINS
-        value: "https://your-frontend.netlify.app,http://localhost:5173"
+        value: "https://your-frontend.pages.dev,http://localhost:5173"
     healthCheckPath: /health
 
 databases:

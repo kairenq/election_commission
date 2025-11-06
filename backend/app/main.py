@@ -41,10 +41,11 @@ async def root():
         "description": "Corporate polling and voting system"
     }
 
-# Health check
+# Health check (GET and HEAD methods for uptime monitoring)
 @app.get("/health")
+@app.head("/health")
 async def health_check():
-    return {"status": "healthy", "app": settings.APP_NAME}
+    return {"status": "ok", "app": settings.APP_NAME}
 
 if __name__ == "__main__":
     import uvicorn
