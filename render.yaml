@@ -1,7 +1,7 @@
 services:
   # Backend API
   - type: web
-    name: voting-platform-api
+    name: election-commission-api
     runtime: python
     region: oregon
     plan: free
@@ -15,5 +15,22 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: BACKEND_CORS_ORIGINS
-        value: "https://your-frontend.pages.dev,http://localhost:5173"
+        value: "https://election-commission.onrender.com,http://localhost:5173"
     healthCheckPath: /health
+
+  # Frontend Static Site
+  - type: web
+    name: election-commission
+    runtime: node
+    region: oregon
+    plan: free
+    branch: claude/debug-error-investigation-011CUqCG4ZA1a22ha2ecqTpe
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: VITE_API_URL
+        value: "https://election-commission-api.onrender.com/api"
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
