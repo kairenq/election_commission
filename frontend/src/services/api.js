@@ -48,9 +48,11 @@ export const pollsAPI = {
   getAll: (skip = 0, limit = 100) => api.get(`/polls?skip=${skip}&limit=${limit}`),
   getOne: (id) => api.get(`/polls/${id}`),
   getById: (id) => api.get(`/polls/${id}`),
+  getOptions: (pollId) => api.get(`/polls/${pollId}/options`),
   create: (data) => api.post('/polls', data),
   update: (id, data) => api.put(`/polls/${id}`, data),
   delete: (id) => api.delete(`/polls/${id}`),
+  createOption: (pollId, data) => api.post(`/polls/${pollId}/options`, data),
 };
 
 // Teams API

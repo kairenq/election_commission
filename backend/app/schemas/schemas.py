@@ -47,6 +47,23 @@ class RoleResponse(RoleBase):
     class Config:
         from_attributes = True
 
+# ============= Poll Option Schemas =============
+class PollOptionBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    order: int = 0
+
+class PollOptionCreate(PollOptionBase):
+    pass  # poll_id will be set in the route
+
+class PollOptionResponse(PollOptionBase):
+    id: int
+    poll_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
 # ============= Poll Schemas =============
 class PollBase(BaseModel):
     name: str
@@ -57,6 +74,7 @@ class PollBase(BaseModel):
 class PollCreate(PollBase):
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
+    options: Optional[List[dict]] = None
 
 class PollUpdate(BaseModel):
     name: Optional[str] = None
@@ -71,23 +89,6 @@ class PollResponse(PollBase):
     end_date: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
-
-# ============= Poll Option Schemas =============
-class PollOptionBase(BaseModel):
-    name: str
-    description: Optional[str] = None
-    order: int = 0
-
-class PollOptionCreate(PollOptionBase):
-    poll_id: int
-
-class PollOptionResponse(PollOptionBase):
-    id: int
-    poll_id: int
-    created_at: datetime
 
     class Config:
         from_attributes = True

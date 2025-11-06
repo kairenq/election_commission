@@ -101,11 +101,9 @@ const AdminPanel = () => {
 
   return (
     <div className="container admin-panel">
-      <div className="admin-header">
-        <div>
-          <h1 className="page-title">Панель администратора</h1>
-          <p className="page-subtitle">Полный контроль над системой голосования</p>
-        </div>
+      <div className="dashboard-header">
+        <h1>Панель администратора</h1>
+        <p>Полный контроль над системой голосования</p>
       </div>
 
       {/* Statistics Grid */}

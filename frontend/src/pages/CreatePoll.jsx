@@ -7,13 +7,27 @@ import './CreatePoll.css';
 const CreatePoll = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  // Set default dates: now and +7 days
+  const now = new Date();
+  const weekLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  const formatDateTimeLocal = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     poll_type: 'corporate_survey',
     status: 'draft',
-    start_date: '',
-    end_date: '',
+    start_date: formatDateTimeLocal(now),
+    end_date: formatDateTimeLocal(weekLater),
   });
   const [options, setOptions] = useState([
     { name: '', description: '' },
@@ -75,10 +89,12 @@ const CreatePoll = () => {
 
     setLoading(true);
     try {
+      // Prepare poll data with options
       const pollData = {
         ...formData,
-        start_date: formData.start_date || new Date().toISOString(),
-        end_date: formData.end_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        start_date: formData.start_date ? new Date(formData.start_date).toISOString() : new Date().toISOString(),
+        end_date: formData.end_date ? new Date(formData.end_date).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        options: validOptions,  // Include options in the request
       };
 
       const response = await pollsAPI.create(pollData);
@@ -90,16 +106,6 @@ const CreatePoll = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const saveDraft = async () => {
-    setFormData(prev => ({ ...prev, status: 'draft' }));
-    handleSubmit(new Event('submit'));
-  };
-
-  const publishPoll = async () => {
-    setFormData(prev => ({ ...prev, status: 'active' }));
-    handleSubmit(new Event('submit'));
   };
 
   return (
@@ -185,7 +191,7 @@ const CreatePoll = () => {
           <div className="form-row">
             <div className="form-group">
               <label className="form-label" htmlFor="start_date">
-                Дата начала
+                Дата и время начала
               </label>
               <input
                 type="datetime-local"
@@ -194,12 +200,15 @@ const CreatePoll = () => {
                 className="form-input"
                 value={formData.start_date}
                 onChange={handleInputChange}
+                min={formatDateTimeLocal(new Date())}
+                max={formData.end_date}
               />
+              <small className="form-hint">Установлено на текущее время</small>
             </div>
 
             <div className="form-group">
               <label className="form-label" htmlFor="end_date">
-                Дата окончания
+                Дата и время окончания
               </label>
               <input
                 type="datetime-local"
@@ -208,7 +217,9 @@ const CreatePoll = () => {
                 className="form-input"
                 value={formData.end_date}
                 onChange={handleInputChange}
+                min={formData.start_date}
               />
+              <small className="form-hint">Установлено на +7 дней от начала</small>
             </div>
           </div>
         </div>
@@ -234,7 +245,7 @@ const CreatePoll = () => {
                     <input
                       type="text"
                       className="form-input"
-                      placeholder="Название варианта"
+                      placeholder="Название варианта *"
                       value={option.name}
                       onChange={(e) => handleOptionChange(index, 'name', e.target.value)}
                     />
@@ -273,23 +284,13 @@ const CreatePoll = () => {
           >
             Отмена
           </button>
-          <div className="actions-right">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={saveDraft}
-              disabled={loading}
-            >
-              Сохранить черновик
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              {loading ? 'Создание...' : 'Создать опрос'}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+          >
+            {loading ? 'Создание...' : 'Создать опрос'}
+          </button>
         </div>
       </form>
     </div>

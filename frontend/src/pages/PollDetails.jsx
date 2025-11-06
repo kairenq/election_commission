@@ -28,13 +28,9 @@ const PollDetails = () => {
       const response = await pollsAPI.getById(id);
       setPoll(response.data);
 
-      // Mock options since they're not returned from API
-      // In production, you'd fetch from /api/polls/{id}/options
-      setOptions([
-        { id: 1, name: 'Вариант 1', description: 'Описание первого варианта' },
-        { id: 2, name: 'Вариант 2', description: 'Описание второго варианта' },
-        { id: 3, name: 'Вариант 3', description: 'Описание третьего варианта' },
-      ]);
+      // Fetch real options from API
+      const optionsResponse = await pollsAPI.getOptions(id);
+      setOptions(optionsResponse.data);
     } catch (error) {
       console.error('Failed to load poll:', error);
       showToast.error('Не удалось загрузить опрос');
