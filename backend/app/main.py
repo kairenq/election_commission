@@ -2,9 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .core import settings, Base, engine
 from .routes import auth_router, polls_router, teams_router, votes_router, feedback_router
+from .core.init_db import init_db
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
+
+# Initialize database with default data (roles and test users)
+init_db()
 
 # Create FastAPI app
 app = FastAPI(

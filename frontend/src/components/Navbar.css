@@ -67,6 +67,28 @@
   color: var(--text-primary);
 }
 
+.btn-help {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.125rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-help:hover {
+  background-color: var(--secondary-dark);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
 .btn-sm {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;

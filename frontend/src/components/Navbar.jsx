@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import InstructionsModal from './InstructionsModal';
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -42,6 +44,13 @@ const Navbar = () => {
                     ⚙️ Админ
                   </Link>
                 )}
+                <button
+                  className="btn-help"
+                  onClick={() => setShowInstructions(true)}
+                  title="Инструкция"
+                >
+                  ❓
+                </button>
                 <div className="navbar-user">
                   <span className="user-name">{user?.full_name || user?.username}</span>
                   <button onClick={handleLogout} className="btn btn-sm btn-danger">
@@ -51,6 +60,13 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <button
+                  className="btn-help"
+                  onClick={() => setShowInstructions(true)}
+                  title="Инструкция"
+                >
+                  ❓
+                </button>
                 <Link to="/login" className="nav-link">
                   Вход
                 </Link>
@@ -62,6 +78,12 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      <InstructionsModal
+        isOpen={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        isAdmin={isAdmin}
+      />
     </nav>
   );
 };

@@ -33,11 +33,25 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card card-lg">
         <div className="auth-header">
-          <h1>С возвращением</h1>
-          <p>Войдите в свою учётную запись платформы голосования</p>
+          <h1>Вход в систему</h1>
+          <p>Войдите в свою учётную запись системы электронного голосования</p>
         </div>
 
-        {error && <div className="alert alert-error">{error}</div>}
+        <div className="test-credentials">
+          <div className="test-credentials-title">
+            🔑 Тестовые учётные данные
+          </div>
+          <div className="test-credential-item">
+            <span className="credential-label">Администратор:</span>
+            <span className="credential-value">admin / admin123</span>
+          </div>
+          <div className="test-credential-item">
+            <span className="credential-label">Пользователь:</span>
+            <span className="credential-value">user / user123</span>
+          </div>
+        </div>
+
+        {error && <div className="alert alert-error" style={{ marginTop: '1rem' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

@@ -40,8 +40,8 @@ const Register = () => {
     <div className="auth-container">
       <div className="auth-card card-lg">
         <div className="auth-header">
-          <h1>Создать учётную запись</h1>
-          <p>Присоединяйтесь к платформе голосования</p>
+          <h1>Регистрация</h1>
+          <p>Создайте учётную запись в системе электронного голосования</p>
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}
