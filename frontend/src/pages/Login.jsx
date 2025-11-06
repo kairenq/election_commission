@@ -33,15 +33,15 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card card-lg">
         <div className="auth-header">
-          <h1>Welcome Back</h1>
-          <p>Sign in to your voting platform account</p>
+          <h1>С возвращением</h1>
+          <p>Войдите в свою учётную запись платформы голосования</p>
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Username</label>
+            <label className="form-label">Имя пользователя</label>
             <input
               type="text"
               name="username"
@@ -50,11 +50,12 @@ const Login = () => {
               onChange={handleChange}
               required
               autoFocus
+              placeholder="Введите имя пользователя"
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password</label>
+            <label className="form-label">Пароль</label>
             <input
               type="password"
               name="password"
@@ -62,17 +63,18 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
+              placeholder="Введите пароль"
             />
           </div>
 
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Вход...' : 'Войти'}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>
-            Don't have an account? <Link to="/register">Sign up</Link>
+            Нет учётной записи? <Link to="/register">Зарегистрироваться</Link>
           </p>
         </div>
       </div>

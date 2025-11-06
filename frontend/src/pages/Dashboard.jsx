@@ -51,8 +51,8 @@ const Dashboard = () => {
   return (
     <div className="container dashboard">
       <div className="dashboard-header">
-        <h1>Welcome back, {user?.full_name || user?.username}! 👋</h1>
-        <p>Here's what's happening with your polls today</p>
+        <h1>С возвращением, {user?.full_name || user?.username}! 👋</h1>
+        <p>Вот что происходит с вашими опросами сегодня</p>
       </div>
 
       <div className="stats-grid grid grid-3">
@@ -60,7 +60,7 @@ const Dashboard = () => {
           <div className="stat-icon">📊</div>
           <div className="stat-content">
             <h3>{stats.polls}</h3>
-            <p>Active Polls</p>
+            <p>Активных опросов</p>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ const Dashboard = () => {
           <div className="stat-icon">👥</div>
           <div className="stat-content">
             <h3>{stats.teams}</h3>
-            <p>Teams</p>
+            <p>Команд</p>
           </div>
         </div>
 
@@ -76,24 +76,24 @@ const Dashboard = () => {
           <div className="stat-icon">💬</div>
           <div className="stat-content">
             <h3>{stats.feedback}</h3>
-            <p>Feedback Items</p>
+            <p>Отзывов</p>
           </div>
         </div>
       </div>
 
       <div className="dashboard-section">
         <div className="section-header flex-between">
-          <h2>Recent Polls</h2>
+          <h2>Недавние опросы</h2>
           <Link to="/polls" className="btn btn-primary">
-            View All Polls
+            Все опросы →
           </Link>
         </div>
 
         {recentPolls.length === 0 ? (
           <div className="card text-center">
-            <p>No polls yet. Create your first poll to get started!</p>
+            <p>Опросов пока нет. Создайте свой первый опрос!</p>
             <Link to="/polls/new" className="btn btn-primary mt-2">
-              Create Poll
+              Создать опрос
             </Link>
           </div>
         ) : (
@@ -101,9 +101,13 @@ const Dashboard = () => {
             {recentPolls.map((poll) => (
               <Link to={`/polls/${poll.id}`} key={poll.id} className="poll-card card">
                 <h3>{poll.name}</h3>
-                <p className="poll-description">{poll.description || 'No description'}</p>
+                <p className="poll-description">{poll.description || 'Без описания'}</p>
                 <div className="poll-meta">
-                  <span className={`status-badge status-${poll.status}`}>{poll.status}</span>
+                  <span className={`status-badge status-${poll.status}`}>
+                    {poll.status === 'active' ? 'Активен' :
+                     poll.status === 'draft' ? 'Черновик' :
+                     poll.status === 'completed' ? 'Завершён' : poll.status}
+                  </span>
                   <span className="poll-type">{poll.poll_type}</span>
                 </div>
               </Link>
@@ -113,30 +117,30 @@ const Dashboard = () => {
       </div>
 
       <div className="quick-actions">
-        <h2>Quick Actions</h2>
+        <h2>Быстрые действия</h2>
         <div className="grid grid-2">
           <Link to="/polls/new" className="action-card card">
             <span className="action-icon">📝</span>
-            <h3>Create Poll</h3>
-            <p>Start a new voting poll</p>
+            <h3>Создать опрос</h3>
+            <p>Начать новый опрос</p>
           </Link>
 
           <Link to="/teams" className="action-card card">
             <span className="action-icon">👥</span>
-            <h3>Manage Teams</h3>
-            <p>View and organize teams</p>
+            <h3>Управление командами</h3>
+            <p>Просмотр и организация команд</p>
           </Link>
 
           <Link to="/feedback/new" className="action-card card">
             <span className="action-icon">💬</span>
-            <h3>Submit Feedback</h3>
-            <p>Share your thoughts</p>
+            <h3>Оставить отзыв</h3>
+            <p>Поделиться мнением</p>
           </Link>
 
           <Link to="/polls" className="action-card card">
             <span className="action-icon">📊</span>
-            <h3>View Results</h3>
-            <p>Check voting results</p>
+            <h3>Посмотреть результаты</h3>
+            <p>Проверить результаты голосования</p>
           </Link>
         </div>
       </div>
