@@ -151,7 +151,7 @@ class VoteBase(BaseModel):
     option_id: int
 
 class VoteCreate(VoteBase):
-    participant_id: int
+    participant_id: Optional[int] = None  # Optional - will be set from current_user
     location: Optional[str] = None
 
 class VoteResponse(VoteBase):

@@ -42,8 +42,8 @@ const PollDetails = () => {
   const checkIfVoted = async () => {
     try {
       const response = await votesAPI.getAll({ poll_id: id });
-      const userVote = response.data.find(vote => vote.user_id === user?.id);
-      if (userVote) {
+      // Backend now returns only current user's votes, so if any vote exists for this poll, user has voted
+      if (response.data.length > 0) {
         setHasVoted(true);
         setShowResults(true);
         loadResults();
@@ -56,7 +56,7 @@ const PollDetails = () => {
   const loadResults = async () => {
     try {
       const response = await votesAPI.getResults(id);
-      setResults(response.data);
+      setResults(response.data.results || []);
     } catch (error) {
       console.error('Failed to load results:', error);
     }
@@ -77,7 +77,6 @@ const PollDetails = () => {
     try {
       await votesAPI.create({
         poll_id: parseInt(id),
-        participant_id: user.id,
         option_id: selectedOption,
       });
 
@@ -247,25 +246,22 @@ const PollDetails = () => {
             <p className="text-center">Голосов пока нет</p>
           ) : (
             <div className="results-list">
-              {results.map((result, index) => {
-                const optionName = options.find(o => o.id === result.option_id)?.name || `Вариант ${result.option_id}`;
-                return (
-                  <div key={index} className="result-item">
-                    <div className="result-header">
-                      <span className="result-name">{optionName}</span>
-                      <span className="result-stats">
-                        {result.vote_count} голосов ({result.percentage?.toFixed(1) || 0}%)
-                      </span>
-                    </div>
-                    <div className="result-bar">
-                      <div
-                        className="result-fill"
-                        style={{ width: `${result.percentage || 0}%` }}
-                      ></div>
-                    </div>
+              {results.map((result, index) => (
+                <div key={index} className="result-item">
+                  <div className="result-header">
+                    <span className="result-name">{result.option_name || `Вариант ${result.option_id}`}</span>
+                    <span className="result-stats">
+                      {result.vote_count} голосов ({result.percentage?.toFixed(1) || 0}%)
+                    </span>
                   </div>
-                );
-              })}
+                  <div className="result-bar">
+                    <div
+                      className="result-fill"
+                      style={{ width: `${result.percentage || 0}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
