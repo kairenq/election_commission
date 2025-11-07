@@ -31,37 +31,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
+# Include API routers FIRST - highest priority
 app.include_router(auth_router, prefix="/api")
 app.include_router(polls_router, prefix="/api")
 app.include_router(teams_router, prefix="/api")
 app.include_router(votes_router, prefix="/api")
 app.include_router(feedback_router, prefix="/api")
 
-# Health check (GET and HEAD methods for uptime monitoring)
+# Health check
 @app.get("/health")
 @app.head("/health")
 async def health_check():
     return {"status": "ok", "app": settings.APP_NAME}
 
-# Mount static files for frontend (if exists)
+# Frontend static files - AFTER API routes
 frontend_dist = Path(__file__).parent.parent.parent / "frontend" / "dist"
+
 if frontend_dist.exists():
-    # Serve static files (JS, CSS, images, etc.)
+    # Serve static assets
     app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")
 
-    # Catch-all route for SPA - must be last and should NOT match /api/* paths
-    @app.get("/{full_path:path}")
-    async def serve_spa(full_path: str):
-        # Don't serve SPA for API routes
-        if full_path.startswith("api/"):
-            return {"detail": "Not Found"}
+    # Serve SPA for root
+    @app.get("/")
+    async def serve_root():
+        return FileResponse(frontend_dist / "index.html")
 
-        # Serve index.html for all other routes (SPA routing)
+    # Catch-all for SPA routes - LAST!
+    @app.get("/{catchall:path}")
+    async def serve_spa(catchall: str):
+        # Only serve SPA if file doesn't exist and it's not an API route
         index_file = frontend_dist / "index.html"
-        if index_file.exists():
-            return FileResponse(index_file)
-        return {"message": "Frontend not found"}
+        return FileResponse(index_file)
 
 if __name__ == "__main__":
     import uvicorn
