@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 from .core import settings, Base, engine
 from .routes import auth_router, polls_router, teams_router, votes_router, feedback_router
@@ -31,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include API routers FIRST - highest priority
+# Include API routers
 app.include_router(auth_router, prefix="/api")
 app.include_router(polls_router, prefix="/api")
 app.include_router(teams_router, prefix="/api")
@@ -44,24 +45,37 @@ app.include_router(feedback_router, prefix="/api")
 async def health_check():
     return {"status": "ok", "app": settings.APP_NAME}
 
-# Frontend static files - AFTER API routes
+# Test POST endpoint to verify POST works
+@app.post("/api/test")
+async def test_post(data: dict = None):
+    return {"message": "POST works!", "data": data}
+
+# Frontend setup
 frontend_dist = Path(__file__).parent.parent.parent / "frontend" / "dist"
 
 if frontend_dist.exists():
-    # Serve static assets
+    # Mount static assets
     app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")
 
-    # Serve SPA for root
-    @app.get("/")
-    async def serve_root():
-        return FileResponse(frontend_dist / "index.html")
+# Custom 404 handler for SPA - serve index.html for non-API routes
+@app.exception_handler(StarletteHTTPException)
+async def custom_404_handler(request, exc):
+    # If it's a 404 and NOT an API route, serve the SPA
+    if exc.status_code == 404 and not request.url.path.startswith("/api"):
+        if frontend_dist.exists():
+            index_file = frontend_dist / "index.html"
+            if index_file.exists():
+                return FileResponse(index_file)
 
-    # Catch-all for SPA routes - LAST!
-    @app.get("/{catchall:path}")
-    async def serve_spa(catchall: str):
-        # Only serve SPA if file doesn't exist and it's not an API route
-        index_file = frontend_dist / "index.html"
-        return FileResponse(index_file)
+    # Otherwise, return the original 404
+    return HTMLResponse(content=f"Not found: {request.url.path}", status_code=404)
+
+# Serve root
+@app.get("/")
+async def serve_root():
+    if frontend_dist.exists():
+        return FileResponse(frontend_dist / "index.html")
+    return {"message": "API is running. Frontend not found."}
 
 if __name__ == "__main__":
     import uvicorn
