@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { pollsAPI } from '../services/api';
+import { pollsAPI, teamsAPI } from '../services/api';
 import { showToast } from '../utils/toast';
 import './CreatePoll.css';
 
 const CreatePoll = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [teams, setTeams] = useState([]);
 
   // Set default dates: now and +7 days
   const now = new Date();
@@ -28,6 +29,7 @@ const CreatePoll = () => {
     status: 'draft',
     start_date: formatDateTimeLocal(now),
     end_date: formatDateTimeLocal(weekLater),
+    team_id: '',
   });
   const [options, setOptions] = useState([
     { name: '', description: '' },
@@ -41,6 +43,20 @@ const CreatePoll = () => {
     { value: 'election', label: 'Выборы' },
     { value: 'general', label: 'Общий опрос' },
   ];
+
+  // Fetch teams on component mount
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await teamsAPI.getAll();
+        setTeams(response.data || []);
+      } catch (error) {
+        console.error('Failed to fetch teams:', error);
+        showToast.error('Не удалось загрузить список команд');
+      }
+    };
+    fetchTeams();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -94,6 +110,7 @@ const CreatePoll = () => {
         ...formData,
         start_date: formData.start_date ? new Date(formData.start_date).toISOString() : new Date().toISOString(),
         end_date: formData.end_date ? new Date(formData.end_date).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        team_id: formData.team_id ? parseInt(formData.team_id) : null,
         options: validOptions,  // Include options in the request
       };
 
@@ -186,6 +203,27 @@ const CreatePoll = () => {
                 <option value="completed">Завершён</option>
               </select>
             </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="team_id">
+              Команда
+            </label>
+            <select
+              id="team_id"
+              name="team_id"
+              className="form-select"
+              value={formData.team_id}
+              onChange={handleInputChange}
+            >
+              <option value="">Все команды (не выбрано)</option>
+              {teams.map(team => (
+                <option key={team.id} value={team.id}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
+            <small className="form-hint">Выберите команду, если опрос предназначен для конкретной команды</small>
           </div>
 
           <div className="form-row">
