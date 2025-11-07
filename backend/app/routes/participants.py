@@ -27,10 +27,21 @@ async def get_my_participant(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Get current user's participant record"""
+    """Get current user's participant record, creating it if it doesn't exist"""
     participant = db.query(Participant).filter(Participant.user_id == current_user.id).first()
+
+    # Auto-create participant record if it doesn't exist
     if not participant:
-        raise HTTPException(status_code=404, detail="Participant record not found")
+        participant = Participant(
+            user_id=current_user.id,
+            full_name=current_user.full_name or current_user.username,
+            email=current_user.email,
+            status="active"
+        )
+        db.add(participant)
+        db.commit()
+        db.refresh(participant)
+
     return participant
 
 @router.post("/join-team", response_model=ParticipantResponse)

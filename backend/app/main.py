@@ -58,6 +58,14 @@ if frontend_dist.exists():
     # Mount static assets
     app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")
 
+    # Serve static files from dist root (like ico.png, favicon.ico, etc)
+    @app.get("/ico.png")
+    async def serve_logo():
+        logo_file = frontend_dist / "ico.png"
+        if logo_file.exists():
+            return FileResponse(logo_file)
+        raise StarletteHTTPException(status_code=404, detail="Logo not found")
+
 # Custom 404 handler for SPA - serve index.html for non-API routes
 @app.exception_handler(StarletteHTTPException)
 async def custom_404_handler(request, exc):
