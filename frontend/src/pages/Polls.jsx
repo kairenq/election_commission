@@ -18,11 +18,12 @@ const Polls = () => {
   const loadPolls = async () => {
     try {
       const response = await pollsAPI.getAll();
-      setPolls(response.data);
+      setPolls(Array.isArray(response.data) ? response.data : []);
       showToast.success('Опросы успешно загружены');
     } catch (error) {
       console.error('Failed to load polls:', error);
       showToast.error('Ошибка загрузки опросов');
+      setPolls([]);
     } finally {
       setLoading(false);
     }

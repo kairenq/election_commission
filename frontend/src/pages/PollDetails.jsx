@@ -30,10 +30,11 @@ const PollDetails = () => {
 
       // Fetch real options from API
       const optionsResponse = await pollsAPI.getOptions(id);
-      setOptions(optionsResponse.data);
+      setOptions(Array.isArray(optionsResponse.data) ? optionsResponse.data : []);
     } catch (error) {
       console.error('Failed to load poll:', error);
       showToast.error('Не удалось загрузить опрос');
+      setOptions([]);
     } finally {
       setLoading(false);
     }
@@ -43,7 +44,8 @@ const PollDetails = () => {
     try {
       const response = await votesAPI.getAll({ poll_id: id });
       // Backend now returns only current user's votes, so if any vote exists for this poll, user has voted
-      if (response.data.length > 0) {
+      const votes = Array.isArray(response.data) ? response.data : [];
+      if (votes.length > 0) {
         setHasVoted(true);
         setShowResults(true);
         loadResults();

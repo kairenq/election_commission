@@ -22,10 +22,11 @@ const Teams = () => {
   const loadTeams = async () => {
     try {
       const response = await teamsAPI.getAll();
-      setTeams(response.data);
+      setTeams(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Failed to load teams:', error);
       showToast.error('Не удалось загрузить команды');
+      setTeams([]);
     } finally {
       setLoading(false);
     }

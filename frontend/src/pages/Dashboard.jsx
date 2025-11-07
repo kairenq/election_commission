@@ -26,15 +26,22 @@ const Dashboard = () => {
         feedbackAPI.getAll(),
       ]);
 
+      // Ensure we have arrays
+      const pollsData = Array.isArray(pollsRes.data) ? pollsRes.data : [];
+      const teamsData = Array.isArray(teamsRes.data) ? teamsRes.data : [];
+      const feedbackData = Array.isArray(feedbackRes.data) ? feedbackRes.data : [];
+
       setStats({
-        polls: pollsRes.data.length,
-        teams: teamsRes.data.length,
-        feedback: feedbackRes.data.length,
+        polls: pollsData.length,
+        teams: teamsData.length,
+        feedback: feedbackData.length,
       });
 
-      setRecentPolls(pollsRes.data);
+      setRecentPolls(pollsData);
     } catch (error) {
       console.error('Failed to load dashboard:', error);
+      // Set empty arrays on error
+      setRecentPolls([]);
     } finally {
       setLoading(false);
     }

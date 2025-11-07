@@ -26,19 +26,29 @@ const AdminPanel = () => {
         feedbackAPI.getAll(),
       ]);
 
-      setPolls(pollsRes.data);
-      setTeams(teamsRes.data);
-      setFeedbackList(feedbackRes.data);
+      // Ensure we have arrays
+      const pollsData = Array.isArray(pollsRes.data) ? pollsRes.data : [];
+      const teamsData = Array.isArray(teamsRes.data) ? teamsRes.data : [];
+      const votesData = Array.isArray(votesRes.data) ? votesRes.data : [];
+      const feedbackData = Array.isArray(feedbackRes.data) ? feedbackRes.data : [];
+
+      setPolls(pollsData);
+      setTeams(teamsData);
+      setFeedbackList(feedbackData);
       setStats({
         users: 0,  // Endpoint не существует в бэкенде
-        polls: pollsRes.data.length,
-        votes: votesRes.data.length,
-        teams: teamsRes.data.length,
-        feedback: feedbackRes.data.length,
+        polls: pollsData.length,
+        votes: votesData.length,
+        teams: teamsData.length,
+        feedback: feedbackData.length,
       });
     } catch (error) {
       console.error('Ошибка загрузки:', error);
       showToast.error('Не удалось загрузить данные');
+      // Set empty arrays on error
+      setPolls([]);
+      setTeams([]);
+      setFeedbackList([]);
     } finally {
       setLoading(false);
     }

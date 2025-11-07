@@ -38,11 +38,13 @@ const Feedback = () => {
     try {
       const response = await feedbackAPI.getAll();
       // Filter feedback by current user
-      const userFeedback = response.data.filter(f => f.participant_id === user?.id);
+      const allFeedback = Array.isArray(response.data) ? response.data : [];
+      const userFeedback = allFeedback.filter(f => f.participant_id === user?.id);
       setFeedbackList(userFeedback);
     } catch (error) {
       console.error('Failed to load feedback:', error);
       showToast.error('Не удалось загрузить обратную связь');
+      setFeedbackList([]);
     } finally {
       setLoading(false);
     }
