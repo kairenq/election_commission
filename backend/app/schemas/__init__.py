@@ -19,6 +19,8 @@ from .schemas import (
     TeamCreate,
     TeamUpdate,
     TeamResponse,
+    TeamWithMembers,
+    TeamMember,
     # Participant
     ParticipantCreate,
     ParticipantUpdate,
@@ -55,6 +57,8 @@ __all__ = [
     "TeamCreate",
     "TeamUpdate",
     "TeamResponse",
+    "TeamWithMembers",
+    "TeamMember",
     "ParticipantCreate",
     "ParticipantUpdate",
     "ParticipantResponse",
