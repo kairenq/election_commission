@@ -50,9 +50,13 @@ if frontend_dist.exists():
     # Serve static files (JS, CSS, images, etc.)
     app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")
 
-    # Catch-all route for SPA - must be last
+    # Catch-all route for SPA - must be last and should NOT match /api/* paths
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
+        # Don't serve SPA for API routes
+        if full_path.startswith("api/"):
+            return {"detail": "Not Found"}
+
         # Serve index.html for all other routes (SPA routing)
         index_file = frontend_dist / "index.html"
         if index_file.exists():
