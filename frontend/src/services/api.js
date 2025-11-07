@@ -62,9 +62,28 @@ export const pollsAPI = {
 export const teamsAPI = {
   getAll: (skip = 0, limit = 100) => api.get(`/teams?skip=${skip}&limit=${limit}`),
   getOne: (id) => api.get(`/teams/${id}`),
+  getWithMembers: (id) => api.get(`/teams/${id}/with-members`),
   create: (data) => api.post('/teams', data),
   update: (id, data) => api.put(`/teams/${id}`, data),
   delete: (id) => api.delete(`/teams/${id}`),
+};
+
+// Participants API
+export const participantsAPI = {
+  getAll: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.team_id) queryParams.append('team_id', params.team_id);
+    if (params.skip !== undefined) queryParams.append('skip', params.skip);
+    if (params.limit !== undefined) queryParams.append('limit', params.limit);
+    return api.get(`/participants?${queryParams.toString()}`);
+  },
+  getMe: () => api.get('/participants/me'),
+  joinTeam: (teamId) => api.post('/participants/join-team', null, { params: { team_id: teamId } }),
+  leaveTeam: () => api.post('/participants/leave-team'),
+  create: (data) => api.post('/participants', data),
+  update: (id, data) => api.put(`/participants/${id}`, data),
+  delete: (id) => api.delete(`/participants/${id}`),
+  removeFromTeam: (id) => api.delete(`/participants/${id}/remove-from-team`),
 };
 
 // Votes API

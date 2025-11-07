@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 from .core import settings, Base, engine
-from .routes import auth_router, polls_router, teams_router, votes_router, feedback_router
+from .routes import auth_router, polls_router, teams_router, votes_router, feedback_router, participants_router
 from .core.init_db import init_db
 
 # Create database tables
@@ -38,6 +38,7 @@ app.include_router(polls_router, prefix="/api")
 app.include_router(teams_router, prefix="/api")
 app.include_router(votes_router, prefix="/api")
 app.include_router(feedback_router, prefix="/api")
+app.include_router(participants_router, prefix="/api")
 
 # Health check
 @app.get("/health")

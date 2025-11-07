@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from ..core import get_db
-from ..models import Team
-from ..schemas import TeamCreate, TeamUpdate, TeamResponse
+from ..models import Team, Participant
+from ..schemas import TeamCreate, TeamUpdate, TeamResponse, TeamWithMembers, TeamMember
 
 router = APIRouter(prefix="/teams", tags=["Teams"])
 
@@ -20,6 +20,29 @@ async def get_team(team_id: int, db: Session = Depends(get_db)):
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
     return team
+
+@router.get("/{team_id}/with-members", response_model=TeamWithMembers)
+async def get_team_with_members(team_id: int, db: Session = Depends(get_db)):
+    """Get a specific team with its members"""
+    team = db.query(Team).filter(Team.id == team_id).first()
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    # Get team members
+    members = db.query(Participant).filter(Participant.team_id == team_id).all()
+
+    # Convert to response format
+    team_dict = {
+        "id": team.id,
+        "name": team.name,
+        "description": team.description,
+        "status": team.status,
+        "registration_date": team.registration_date,
+        "created_at": team.created_at,
+        "members": members
+    }
+
+    return team_dict
 
 @router.post("/", response_model=TeamResponse, status_code=201)
 async def create_team(team_data: TeamCreate, db: Session = Depends(get_db)):

@@ -115,6 +115,24 @@ class TeamResponse(TeamBase):
     class Config:
         from_attributes = True
 
+class TeamMember(BaseModel):
+    """Team member info for display"""
+    id: int
+    user_id: Optional[int] = None
+    full_name: str
+    email: Optional[str] = None
+    status: str
+
+    class Config:
+        from_attributes = True
+
+class TeamWithMembers(TeamResponse):
+    """Team response with members list"""
+    members: List['TeamMember'] = []
+
+    class Config:
+        from_attributes = True
+
 # ============= Participant Schemas =============
 class ParticipantBase(BaseModel):
     full_name: str

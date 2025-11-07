@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import InstructionsModal from './InstructionsModal';
-import { MdHowToVote } from 'react-icons/md';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -22,7 +21,7 @@ const Navbar = () => {
       <div className="container">
         <div className="navbar-content">
           <Link to="/" className="navbar-brand">
-            <MdHowToVote style={{ fontSize: '1.5em', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+            <img src="/ico.png" alt="Logo" style={{ height: '24px', marginRight: '0.5rem', verticalAlign: 'middle' }} />
             Система Голосования
           </Link>
 
