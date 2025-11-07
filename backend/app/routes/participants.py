@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from ..core import get_db, get_current_user
+from ..core import get_db
 from ..models import Participant, User, Team
 from ..schemas import ParticipantCreate, ParticipantUpdate, ParticipantResponse
+from .auth import get_current_user
 
 router = APIRouter(prefix="/participants", tags=["Participants"])
 
