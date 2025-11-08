@@ -21,7 +21,7 @@ const Navbar = () => {
       <div className="container">
         <div className="navbar-content">
           <Link to="/" className="navbar-brand">
-            <img src="/ico.png" alt="Logo" style={{ height: '24px', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+            <img src="/ico.png" alt="Logo" style={{ height: '60px', marginRight: '0.5rem', verticalAlign: 'middle' }} />
             Система Голосования
           </Link>
 
