@@ -1,0 +1,20 @@
+# Database
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Node
+node_modules/
+dist/
+*.local
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
