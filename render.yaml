@@ -1,0 +1,31 @@
+services:
+  # Combined Backend + Frontend
+  - type: web
+    name: election-commission
+    runtime: python
+    region: oregon
+    plan: free
+    branch: claude/debug-error-investigation-011CUqCG4ZA1a22ha2ecqTpe
+    buildCommand: |
+      # Install Python dependencies
+      cd backend
+      python --version
+      pip install --upgrade pip
+      pip install --no-cache-dir -r requirements.txt
+
+      # Build frontend
+      cd ../frontend
+      npm install
+      VITE_API_URL=/api npm run build
+
+      # Return to root
+      cd ..
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: BACKEND_CORS_ORIGINS
+        value: "*"
+    healthCheckPath: /health
